@@ -1,0 +1,74 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Mobile - Flappy Bird - Version 12 Sprites.png" type="Texture" id=1]
+[ext_resource path="res://Level.gd" type="Script" id=2]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Pipes/Pipe.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Pipes/DownPipe.tscn" type="PackedScene" id=6]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 232, 0, 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -2, -212, 0, 0, 0, 0, 0, -3 )
+}
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 2 )
+Pipe = ExtResource( 5 )
+DownPipe = ExtResource( 6 )
+
+[node name="Background" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Background"]
+
+[node name="Sprite" type="Sprite" parent="Background/ParallaxLayer"]
+scale = Vector2( 4, 2.2 )
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 100, 250 )
+
+[node name="Ground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="Ground"]
+motion_mirroring = Vector2( 300, 0 )
+
+[node name="Sprite" type="Sprite" parent="Ground/ParallaxLayer2"]
+position = Vector2( 0, 450 )
+scale = Vector2( 2.5, 1.8 )
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 300, 0, 160, 55 )
+
+[node name="HUD" parent="." instance=ExtResource( 3 )]
+
+[node name="Player" parent="." instance=ExtResource( 4 )]
+position = Vector2( 200, 200 )
+
+[node name="PipePath" type="Path2D" parent="."]
+position = Vector2( 400, 0 )
+curve = SubResource( 1 )
+
+[node name="PipeSpawn" type="PathFollow2D" parent="PipePath"]
+position = Vector2( 0, 232 )
+rotation = -1.5708
+
+[node name="PipeTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="DownPipePath" type="Path2D" parent="."]
+position = Vector2( 400, 430 )
+curve = SubResource( 2 )
+
+[node name="DownPipeSpawn" type="PathFollow2D" parent="DownPipePath"]
+position = Vector2( -2, -212 )
+rotation = 1.56123
+
+[connection signal="start_game" from="HUD" to="." method="_on_HUD_start_game"]
+[connection signal="timeout" from="PipeTimer" to="." method="_on_PipeTimer_timeout"]

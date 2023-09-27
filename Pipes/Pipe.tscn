@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Mobile - Flappy Bird - Version 12 Sprites.png" type="Texture" id=1]
+[ext_resource path="res://Pipes/Pipe.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 22, 119 )
+
+[node name="Pipe" type="Area2D" groups=["Pipe"]]
+script = ExtResource( 2 )
+speed = 80
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 1.5 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 55, 320, 28, 164 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+rect = Rect2( -21, -118, 43, 238 )
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
